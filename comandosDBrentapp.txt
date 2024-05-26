@@ -1,0 +1,56 @@
+CREATE DATABASE `rentacartf` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish2_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
+CREATE TABLE `vehiculo` (
+  `MatriculaCar` varchar(7) COLLATE utf8_spanish2_ci NOT NULL,
+  `Fabricante` varchar(25) COLLATE utf8_spanish2_ci NOT NULL,
+  `Modelo` varchar(25) COLLATE utf8_spanish2_ci NOT NULL,
+  `Motorizacion` varchar(25) COLLATE utf8_spanish2_ci NOT NULL,
+  `Antigüedad` int NOT NULL,
+  `Alquilado` tinyint NOT NULL,
+  `EnMantenimiento` tinyint NOT NULL,
+  `Descripcion` varchar(400) COLLATE utf8_spanish2_ci NOT NULL,
+  `TipoVehiculo` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `PrecioDia` int NOT NULL,
+  PRIMARY KEY (`MatriculaCar`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_spanish2_ci;
+
+CREATE TABLE `vistageneral` (
+  `Matricula` varchar(7) COLLATE utf8_spanish2_ci NOT NULL,
+  `Modelo` varchar(50) COLLATE utf8_spanish2_ci NOT NULL,
+  `Alquilado` tinyint NOT NULL,
+  `EnMantenimiento` tinyint NOT NULL,
+  `DNIInquilino` varchar(9) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  KEY `Matricula_idx` (`Matricula`),
+  CONSTRAINT `Matricula` FOREIGN KEY (`Matricula`) REFERENCES `vehiculo` (`MatriculaCar`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_spanish2_ci;
+
+
+CREATE TABLE `mantenimiento` (
+  `MatriculaMant` varchar(7) COLLATE utf8_spanish2_ci NOT NULL,
+  `Modelo` varchar(50) COLLATE utf8_spanish2_ci NOT NULL,
+  `Tipo` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `Estado` enum('Pendiente','En curso','Finalizado') COLLATE utf8_spanish2_ci NOT NULL,
+  KEY `MatriculaMant_idx` (`MatriculaMant`),
+  CONSTRAINT `MatriculaMant` FOREIGN KEY (`MatriculaMant`) REFERENCES `vehiculo` (`MatriculaCar`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_spanish2_ci;
+
+CREATE TABLE `admin` (
+  `idAdmin` int unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `password` varchar(99) COLLATE utf8_spanish2_ci NOT NULL,
+  PRIMARY KEY (`idAdmin`),
+  UNIQUE KEY `idAdmin_UNIQUE` (`idAdmin`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_spanish2_ci;
+
+CREATE TABLE `cliente` (
+  `DNI` varchar(9) COLLATE utf8_spanish2_ci NOT NULL,
+  `Nombre` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `Apellidos` varchar(65) COLLATE utf8_spanish2_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8_spanish2_ci NOT NULL,
+  `password` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `Saldo` int unsigned NOT NULL,
+  `InicioAlquiler` date DEFAULT NULL,
+  `FinAlquiler` date DEFAULT NULL,
+  `MatriculaAlq` varchar(7) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  PRIMARY KEY (`DNI`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_spanish2_ci;
